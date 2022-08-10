@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
       title: 'Startup Name Generator',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
+          backgroundColor: Colors.pink,
+          foregroundColor: Colors.white,
         ),
       ),
       home: const RandomWords(),
