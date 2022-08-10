@@ -50,21 +50,30 @@ class _RandomWordsState extends State<RandomWords> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.pink,
-            child: 
-              Icon(_viewType == ViewType.grid ? Icons.grid_view : Icons.list),
-            onPressed: () {
-              if (_viewType == ViewType.grid) {
-                _viewType = ViewType.list;
-                _colum = 1;
-              } else {
-                _viewType = ViewType.grid;
-                _colum = 2;
-              }
-            },
-          ),
+        backgroundColor: Colors.pink,
+        child: Icon(_viewType == ViewType.grid ? Icons.grid_view : Icons.list),
+        onPressed: _pushSwitch,
+      ),
+      body: _getBody()
+    );
+  }
 
-      body: ListView.builder(
+  _pushSwitch() {
+    if (_viewType == ViewType.grid) {
+      _viewType = ViewType.list;
+      _colum = 1;
+    } else {
+      _viewType = ViewType.grid;
+      _colum = 2;
+    }
+    setState(() {
+      
+    });
+  }
+
+  _getBody() {
+    if (_viewType == ViewType.list) {
+      return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
           if (i.isOdd) return const Divider();
@@ -97,11 +106,48 @@ class _RandomWordsState extends State<RandomWords> {
             },
           );
         },
-      ),
-    );
+      );
+    } else {
+      return GridView.builder(
+        gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2),
+        padding: const EdgeInsets.all(16.0),
+        itemBuilder: (context, i) {
+        
+          if (i >= _suggestions.length) {
+            _suggestions.addAll(generateWordPairs().take(10));
+          }
+
+          final alreadySaved = _saved.contains(_suggestions[i]);
+
+          return ListTile(
+            title: Text(
+              _suggestions[i].asPascalCase,
+              style: _biggerFont,
+            ),
+            trailing: Icon(
+              alreadySaved ? Icons.favorite : Icons.favorite_border,
+              color: alreadySaved ? Colors.red : null,
+              semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+            ),
+            onTap: () {
+              setState(() {
+                if (alreadySaved) {
+                  _saved.remove(_suggestions[i]);
+                } else {
+                  _saved.add(_suggestions[i]);
+                }
+              });
+            },
+          );
+        },
+      );
+    }
+
   }
 
-  void _pushSaved() {
+  _pushSaved() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) {
