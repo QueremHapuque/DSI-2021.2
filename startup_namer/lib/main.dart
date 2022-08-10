@@ -5,6 +5,8 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
+enum ViewType { grid, list }
+
 void main() {
   runApp(const MyApp());
 }
@@ -31,20 +33,37 @@ class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18);
+  ViewType _viewType = ViewType.list;
+  int _colum = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Startup Name Generator'),
+        title: const Text('Gerador de Nomes Aleatórios'),
         actions: [
           IconButton(
             icon: const Icon(Icons.list),
             onPressed: _pushSaved,
-            tooltip: 'Saved Suggestions',
+            tooltip: 'Favoritos',
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.pink,
+            child: 
+              Icon(_viewType == ViewType.grid ? Icons.grid_view : Icons.list),
+            onPressed: () {
+              if (_viewType == ViewType.grid) {
+                _viewType = ViewType.list;
+                _colum = 1;
+              } else {
+                _viewType = ViewType.grid;
+                _colum = 2;
+              }
+            },
+          ),
+
       body: ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
@@ -105,7 +124,7 @@ class _RandomWordsState extends State<RandomWords> {
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Saved Suggestions'),
+              title: const Text('Favoritos'),
             ),
             body: ListView(children: divided),
           );
