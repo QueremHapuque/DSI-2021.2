@@ -110,8 +110,7 @@ class _RandomWordsState extends State<RandomWords> {
     } else {
       return GridView.builder(
         gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2),
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
         
@@ -122,10 +121,11 @@ class _RandomWordsState extends State<RandomWords> {
           final alreadySaved = _saved.contains(_suggestions[i]);
 
           return ListTile(
-            title: Text(
+            title: Center(
+              child: Text(
               _suggestions[i].asPascalCase,
               style: _biggerFont,
-            ),
+            )),
             trailing: Icon(
               alreadySaved ? Icons.favorite : Icons.favorite_border,
               color: alreadySaved ? Colors.red : null,
