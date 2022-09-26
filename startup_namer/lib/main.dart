@@ -51,8 +51,8 @@ class _RandomWordsState extends State<RandomWords> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.pink,
-        child: Icon(_viewType == ViewType.grid ? Icons.list : Icons.grid_view),
         onPressed: _pushSwitch,
+        child: Icon(_viewType == ViewType.grid ? Icons.list : Icons.grid_view),
       ),
       body: _getBody()
     );
