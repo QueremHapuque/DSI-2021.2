@@ -34,41 +34,34 @@ class _RandomWordsState extends State<RandomWords> {
   final _saved = <WordPair>{};
   final _biggerFont = const TextStyle(fontSize: 18);
   ViewType _viewType = ViewType.list;
-  int _colum = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gerador de Nomes Aleatórios'),
-        actions: [
+        appBar:
+            AppBar(title: const Text('Gerador de Nomes Aleatórios'), actions: [
           IconButton(
             icon: const Icon(Icons.list),
             onPressed: _pushSaved,
             tooltip: 'Favoritos',
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink,
-        onPressed: _pushSwitch,
-        child: Icon(_viewType == ViewType.grid ? Icons.list : Icons.grid_view),
-      ),
-      body: _getBody()
-    );
+          )
+        ]),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.pink,
+          onPressed: _pushSwitch,
+          child:
+              Icon(_viewType == ViewType.grid ? Icons.list : Icons.grid_view),
+        ),
+        body: _getBody());
   }
 
   _pushSwitch() {
     if (_viewType == ViewType.grid) {
       _viewType = ViewType.list;
-      _colum = 1;
     } else {
       _viewType = ViewType.grid;
-      _colum = 2;
     }
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   _getBody() {
@@ -85,15 +78,32 @@ class _RandomWordsState extends State<RandomWords> {
 
           final alreadySaved = _saved.contains(_suggestions[index]);
 
+          const pair = WordPair;
+
           return ListTile(
             title: Text(
               _suggestions[index].asPascalCase,
               style: _biggerFont,
             ),
-            trailing: Icon(
-              alreadySaved ? Icons.favorite : Icons.favorite_border,
-              color: alreadySaved ? Colors.red : null,
-              semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+            trailing: SizedBox(
+              width: 70,
+              child: Row(
+                children: [
+                  Icon(
+                    alreadySaved ? Icons.favorite : Icons.favorite_border,
+                    color: alreadySaved ? Colors.red : null,
+                    semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+                  ),
+                  IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    _suggestions.remove(pair);
+                    _saved.remove(pair);
+                  });
+                })
+                ],
+              ),
             ),
             onTap: () {
               setState(() {
@@ -110,10 +120,9 @@ class _RandomWordsState extends State<RandomWords> {
     } else {
       return GridView.builder(
         gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
-        
           if (i >= _suggestions.length) {
             _suggestions.addAll(generateWordPairs().take(10));
           }
@@ -122,7 +131,7 @@ class _RandomWordsState extends State<RandomWords> {
 
           return ListTile(
             title: Center(
-              child: Text(
+                child: Text(
               _suggestions[i].asPascalCase,
               style: _biggerFont,
             )),
@@ -144,7 +153,6 @@ class _RandomWordsState extends State<RandomWords> {
         },
       );
     }
-
   }
 
   _pushSaved() {
@@ -177,6 +185,15 @@ class _RandomWordsState extends State<RandomWords> {
         },
       ),
     );
+  }
+
+  _pushDelete(WordPair pair) {
+    () {
+      setState(() {
+        _suggestions.remove(pair);
+        _saved.remove(pair);
+      });
+    };
   }
 }
 
